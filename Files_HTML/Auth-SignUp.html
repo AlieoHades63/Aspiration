@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up</title>
+  <link rel="icon" href="/Pictures_Thumbnails/Tab-Icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/Files_CSS/SignUp-Style.css">
+</head>
+
+<body>
+  <div class="Container">
+    <div class="ContainerTitle">Sign Up</div>
+    <input id="NewUsernameInput" type="text" placeholder="New Username" class="InputField" />
+    <input id="NewPasswordInput" type="password" placeholder="New Password" class="InputField" />
+    <div class="RadioContainer">
+      <label><input type="radio" name="AccountType" value="Child" /> Child</label>
+      <label><input type="radio" name="AccountType" value="Adult" /> Adult</label>
+    </div>
+    <button id="SignupButton" class="LoginButton">Create Account</button>
+    <div id="ErrorLabel" class="ErrorLabel"></div>
+    <div class="ContainerFooter">
+      <div>Already have an account?</div>
+      <button id="ToLoginButton" class="ContainerChangeButton">Log In</button>
+    </div>
+  </div>
+  <script src="/Files_JS/Handler-Save.js"></script>
+  <script src="/Files_JS/Handler-Auth.js"></script>
+  <script>
+    SetupSignup();
+  </script>
+</body>
+
+</html>

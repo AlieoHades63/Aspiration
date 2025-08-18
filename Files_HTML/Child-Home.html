@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aspiration — Home</title>
+  <link rel="icon" href="/Pictures_Thumbnails/Tab-Icon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/Files_CSS/Home-Child-Style.css" />
+</head>
+
+<body>
+  <!-- NAVBAR (unchanged) -->
+  <div class="NavBar" role="navigation" aria-label="Main navigation">
+    <div class="NavLeft">
+      <span class="LogoText">Aspiration</span>
+      <div class="NavLinks" role="menu" aria-label="Primary">
+        <button class="NavLinkButton" id="NavHomeBtn">Home</button>
+        <button class="NavLinkButton" id="NavPlayBtn">Play</button>
+      </div>
+    </div>
+    <div class="ProfileContainer" aria-label="User profile">
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+        <span class="Username" id="UsernameDisplay">Guest</span>
+        <span id="PlayerLevelDisplay" class="PlayerLevelDisplay">Lv 1</span>
+      </div>
+      <img src="/Pictures_Thumbnails/Flower.png" alt="profile" class="ProfilePicture" id="ProfileImage" />
+    </div>
+  </div>
+
+  <!-- INNER UI -->
+  <main class="InnerUI" role="main" aria-live="polite">
+    <div class="InnerGrid">
+      <!-- LEFT: Achievements -->
+      <section class="Card AchievementsCard" id="AchievementsCard" aria-live="polite">
+        <div class="CardHeader">
+          <h2>Achievements</h2>
+          <small class="CardHint">Progress & levels</small>
+        </div>
+        <div id="AchievementsList" class="AchievementsList" role="list" tabindex="0"></div>
+      </section>
+
+      <!-- RIGHT: Time Played + Daily Reward (stacked) -->
+      <div class="RightColumn" id="RightColumn">
+        <div class="Card TimePlayedCard" id="TimePlayedCard">
+          <div class="CardHeader">
+            <h3>Time Played</h3>
+            <small class="CardHint">Session & daily</small>
+          </div>
+          <div class="TimePlayedInner">
+            <svg class="ProgressRing" width="96" height="96" viewBox="0 0 120 120" aria-hidden="true">
+              <defs>
+                <linearGradient id="gradient" x1="1" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#aed581" />
+                  <stop offset="100%" stop-color="#7cb342" />
+                </linearGradient>
+              </defs>
+              <circle class="RingBg" cx="60" cy="60" r="54" stroke="#e0e9d4" stroke-width="12" fill="none"></circle>
+              <circle class="RingProgress" cx="60" cy="60" r="54" stroke="url(#gradient)" stroke-width="12"
+                stroke-linecap="round" fill="none" transform="rotate(-90 60 60)"></circle>
+              <text class="ProgressRingText" x="60" y="66">0h 0m 0s</text>
+            </svg>
+            <div class="TimeInfo">
+              <div class="TimeValue" id="TimePlayedText">0h 0m 0s</div>
+              <div class="TimeHint">Play to earn daily rewards</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="Card DailyCard" id="DailyCard">
+          <div class="CardHeader">
+            <h3>Daily Reward</h3>
+            <small class="CardHint">Claim once a day</small>
+          </div>
+          <div class="DailyInner">
+            <div id="DailyInfo" class="DailyInfo">Loading...</div>
+            <div class="DailyActions">
+              <button id="ClaimDailyBtn" class="NavLinkButton">Claim Reward</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHOP: full width under top row -->
+      <section class="Card ShopCardFull" id="ShopCard">
+        <div class="CardHeader">
+          <h3>Shop</h3>
+          <div class="CardHeaderRight">
+            <span class="CoinDisplay" id="CoinsDisplayHome" title="Your coins">🪙 0</span>
+          </div>
+        </div>
+        <div class="ShopListFull" id="ShopList" aria-live="polite" tabindex="0"></div>
+      </section>
+
+      <!-- BADGES: full width -->
+      <section class="Card BadgesCardFull" id="BadgesCard">
+        <div class="CardHeader">
+          <h2>Badges</h2>
+          <small class="CardHint">Achievements earned</small>
+        </div>
+        <div class="BadgesGridFull" id="BadgesGrid" aria-live="polite" tabindex="0"></div>
+      </section>
+    </div>
+  </main>
+
+  <div id="TransientBanner" class="TransientBanner" aria-hidden="true"></div>
+
+  <script src="/Files_JS/Handler-Save.js"></script>
+  <script src="/Files_JS/Handler-Defs.js"></script>
+  <script src="/Files_JS/Handler-Home.js"></script>
+</body>
+
+</html>

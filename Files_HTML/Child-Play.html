@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aspiration — Play</title>
+  <link rel="icon" href="/Pictures_Thumbnails/Tab-Icon.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/Files_CSS/Play-Child-Style.css" />
+</head>
+
+<body>
+  <!-- NavBar: mirror Home for exact visual parity -->
+  <div class="NavBar" role="navigation" aria-label="Main navigation">
+    <div class="NavLeft">
+      <span class="LogoText">Aspiration</span>
+      <div class="NavLinks" role="menu" aria-label="Primary">
+        <button class="NavLinkButton" id="NavHomeBtn">Home</button>
+        <button class="NavLinkButton" id="NavPlayBtn">Play</button>
+      </div>
+    </div>
+    <div class="ProfileContainer" aria-label="User profile">
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+        <span class="Username" id="UsernameDisplay">Guest</span>
+        <span id="PlayerLevelDisplay" class="PlayerLevelDisplay">Lv 1</span>
+      </div>
+      <img src="/Pictures_Thumbnails/Flower.png" alt="Profile Picture" class="ProfilePicture" />
+    </div>
+  </div>
+
+  <main class="Container" role="main">
+    <canvas id="GameCanvas" width="1024" height="640" aria-label="Game canvas" tabindex="0"></canvas>
+
+    <div id="ProximityPrompt" class="ProximityPrompt" aria-hidden="true" role="button" tabindex="-1">E</div>
+
+    <section id="QuestionUI" role="dialog" aria-modal="true" aria-hidden="true">
+      <div id="QuestionBackdrop"></div>
+      <div id="QuestionCard">
+        <div id="QuestionText" aria-live="polite"></div>
+        <div class="ChoicesWrapper">
+          <div class="ChoicesContainer" id="ChoicesContainer" aria-label="Answer choices" role="list"></div>
+        </div>
+      </div>
+    </section>
+
+    <div id="CoinsContainer">
+      <div id="CoinsUI" class="CoinsUI" title="$0"></div>
+    </div>
+
+    <!-- Top-right persistent controls: Shop / Mute / HUD toggle -->
+    <div id="TopRightControls" class="TopRightControls" aria-hidden="false" role="toolbar" aria-label="Top controls">
+      <button id="MuteBtn" class="IconBtn" title="Mute / Unmute" aria-pressed="false" aria-label="Mute">🔊</button>
+      <button id="HUDToggleBtn" class="IconBtn" title="Minimize HUD" aria-pressed="false"
+        aria-label="Toggle HUD">—</button>
+    </div>
+
+    <!-- The main HUD — now positioned at the top (right of coins) via CSS -->
+    <div id="MiniHUD" class="MiniHUD" aria-hidden="false">
+      <div id="ProgressWidgets" class="ProgressWidgets">
+        <div class="Widget LevelWidget">
+          <div class="LevelText">Level</div>
+          <div class="SmallStat">Lv <span id="PlayerLevel">1</span></div>
+        </div>
+
+        <div class="Widget StreakWidget">
+          <div class="LevelText">Streak</div>
+          <div class="SmallStat"><span id="StreakDays">0</span> days</div>
+        </div>
+
+        <div class="Widget GoalWidget" id="GoalWidget" aria-live="polite">
+          <div class="LevelText">Daily Goal</div>
+          <div class="SmallStat" id="GoalText">Help 3 friends</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="TopControlDock" class="TopControlDock hidden" aria-hidden="true" style="display:none;">
+      <button id="TopMuteBtn" class="IconBtn" title="Mute / Unmute">🔊</button>
+      <button id="TopUnhideBtn" class="IconBtn" title="Restore HUD">⤴</button>
+    </div>
+
+    <div id="TutorialHelp" class="TutorialHelp hidden" aria-hidden="true"></div>
+    <div id="TransientBanner" class="TransientBanner" aria-hidden="true"></div>
+  </main>
+
+  <audio id="SFX_Correct" src="/Sounds/correct.mp3" preload="auto"></audio>
+  <audio id="SFX_Wrong" src="/Sounds/wrong.mp3" preload="auto"></audio>
+  <audio id="SFX_Coin" src="/Sounds/coin.mp3" preload="auto"></audio>
+  <audio id="SFX_LevelUp" src="/Sounds/levelup.mp3" preload="auto"></audio>
+
+  <script src="/Files_JS/Handler-Save.js"></script>
+  <script src="/Files_JS/Handler-Defs.js"></script>
+  <script src="/Files_JS/Handler-Game.js"></script>
+</body>
+
+</html>

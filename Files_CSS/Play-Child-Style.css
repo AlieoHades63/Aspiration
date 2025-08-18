@@ -1,0 +1,485 @@
+/* Play-Child-Style.css - full file with HUD placed at top and consistent top-bar sizing */
+
+* {
+  box-sizing: border-box;
+  font-family: 'Fredoka', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Variables */
+:root {
+  --green: #4caf50;
+  --green-dark: #2e7d32;
+  --panel: rgba(249, 255, 246, 0.98);
+  --muted: #6b8f5a;
+  --ui-z: 15000;
+}
+
+body {
+  background: url("/Pictures_Thumbnails/Background.png") no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--green-dark);
+  overflow: hidden;
+}
+
+/* Nav */
+.NavBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f9fff6;
+  border-bottom: 4px solid var(--green);
+  height: 70px;
+  padding: 8px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+  z-index: calc(var(--ui-z) + 200);
+}
+
+.NavLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.LogoText {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--green);
+  user-select: none;
+}
+
+.NavLinks {
+  display: flex;
+  gap: 10px;
+}
+
+/* NavLinkButton: same sizing used on Home so both pages match exactly */
+.NavLinkButton {
+  padding: 10px 18px;
+  background: var(--green);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background .2s, transform .12s;
+  box-shadow: 0 3px 6px rgba(76, 175, 80, .45);
+}
+
+.NavLinkButton:hover {
+  background: #3b9440;
+  transform: translateY(-2px);
+}
+
+/* Profile */
+.ProfileContainer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ProfilePicture {
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  border: 3px solid var(--green);
+  object-fit: cover;
+}
+
+.Username {
+  font-weight: 700;
+  color: #357a38;
+  font-size: 1.1rem;
+}
+
+/* Small player-level display in nav/profile */
+.PlayerLevelDisplay {
+  font-weight: 700;
+  color: #4a7c1a;
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+/* Main container & canvas */
+.Container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 70px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+#GameCanvas {
+  width: 100%;
+  height: 100%;
+  background: #0b2b12;
+  image-rendering: pixelated;
+  display: block;
+  border-radius: 6px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .4);
+  touch-action: none;
+  position: relative;
+  z-index: 1;
+  /* below UI */
+}
+
+/* Proximity prompt */
+.ProximityPrompt {
+  position: fixed;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  border: 2px solid var(--green);
+  color: var(--green);
+  font-weight: 800;
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  transform-origin: center bottom;
+  transition: transform .18s ease, opacity .18s ease;
+  opacity: 0;
+  transform: scale(0);
+  z-index: calc(var(--ui-z) - 100);
+}
+
+.ProximityPrompt.visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* Coins */
+#CoinsContainer {
+  position: fixed;
+  left: 12px;
+  top: 84px;
+  z-index: calc(var(--ui-z) - 50);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.CoinsUI {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #357a38;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(244, 255, 244, 0.95);
+  padding: 12px 12px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(53, 122, 56, 0.25);
+  min-width: 110px;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+/* Top-right persistent controls (Shop, Mute, HUD Toggle) */
+.TopRightControls {
+  position: fixed;
+  right: 12px;
+  top: 84px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  z-index: calc(var(--ui-z) + 10);
+  pointer-events: auto;
+  background: transparent;
+}
+
+.TopRightControls .IconBtn {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  border: none;
+  cursor: pointer;
+}
+
+/* Main HUD — placed at top to the right of coins UI so top bar looks consistent */
+.MiniHUD {
+  position: fixed;
+  left: calc(12px + 110px + 12px);
+  /* to the right of coins UI */
+  top: 84px;
+  /* aligned with top controls */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: calc(var(--ui-z) + 5);
+  transition: opacity .25s ease;
+  background: rgba(249, 255, 246, 0.98);
+  padding: 8px 10px;
+  /* smaller vertical padding to match TopRightControls */
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  min-height: 56px;
+  /* match TopRightControls visual height */
+}
+
+/* Hide via class when collapsed */
+.MiniHUD.hidden {
+  display: none !important;
+}
+
+/* Widgets in HUD arranged horizontally for top bar look */
+.ProgressWidgets {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* Each widget compact for top bar */
+.Widget {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 96px;
+  align-items: flex-start;
+}
+
+.LevelText {
+  font-weight: 800;
+  color: var(--green-dark);
+  font-size: 0.78rem;
+}
+
+.SmallStat {
+  font-weight: 700;
+  color: #2e6b2e;
+  font-size: 0.9rem;
+}
+
+/* Smaller compact bars (we don't show long XP bars in top HUD) */
+.BarWrap {
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.Bar {
+  display: none;
+}
+
+/* Goal widget style in top bar */
+.GoalWidget {
+  min-width: 140px;
+  padding: 4px 8px;
+  background: transparent;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.GoalWidget .LevelText {
+  font-size: 0.78rem;
+}
+
+.GoalWidget .SmallStat {
+  font-size: 0.86rem;
+  color: var(--muted);
+}
+
+/* Top control dock used when HUD is collapsed */
+.TopControlDock {
+  display: flex;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--panel);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .12);
+  align-items: center;
+  z-index: calc(var(--ui-z) + 5);
+  position: fixed;
+  left: calc(12px + 110px + 12px);
+  top: 84px;
+  pointer-events: auto;
+  transition: left .18s ease, top .18s ease, transform .18s ease;
+}
+
+.TopControlDock.hidden {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* Question UI / modal */
+#QuestionUI {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: calc(var(--ui-z) + 20);
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .28s ease, visibility 0s .28s;
+}
+
+#QuestionUI.visible {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#QuestionBackdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+}
+
+#QuestionCard {
+  position: relative;
+  width: min(1100px, 94%);
+  max-height: 88vh;
+  padding: 24px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: calc(var(--ui-z) + 21);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  color: #fff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.ChoicesWrapper {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  margin-top: 12px;
+  padding-bottom: 6vh;
+}
+
+.ChoicesContainer {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(260px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.Choice {
+  background: rgba(255, 255, 255, 0.06);
+  color: #e7f6ea;
+  border-radius: 14px;
+  padding: 18px;
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  transition: transform .22s, box-shadow .28s, background .28s;
+  min-height: 88px;
+  text-align: center;
+}
+
+.Choice:hover,
+.Choice.selected {
+  background: var(--green);
+  color: #fff;
+  transform: translateY(-8px);
+  box-shadow: 0 18px 40px rgba(76, 175, 80, 0.95);
+  z-index: 6;
+}
+
+/* Shop panel */
+.ShopPanel {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  width: 340px;
+  padding: 12px;
+  background: var(--panel);
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  z-index: calc(var(--ui-z) - 10);
+}
+
+/* Misc */
+.TransientBanner {
+  position: fixed;
+  left: 50%;
+  top: 12%;
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f8fff1, #e6f8e6);
+  color: #186a16;
+  font-weight: 800;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  z-index: calc(var(--ui-z) + 5);
+  opacity: 0;
+  transition: opacity .28s;
+  pointer-events: none;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.35);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.CoinsUI.animate .CoinsAmount {
+  animation: pulse .36s ease-in-out;
+}
+
+/* Utility & responsiveness */
+.hidden {
+  display: none !important;
+  opacity: 0;
+}
+
+:focus {
+  outline: 3px solid rgba(255, 255, 255, 0.12);
+  outline-offset: 3px;
+}
+
+@media (max-width: 900px) {
+  .TopRightControls {
+    right: 8px;
+    top: 72px;
+    gap: 8px;
+  }
+
+  .MiniHUD {
+    left: 12px;
+    top: 120px;
+  }
+
+  /* fallback stacking for narrow screens */
+  .CoinsUI {
+    left: 12px;
+    top: 72px;
+  }
+
+  #QuestionCard {
+    padding: 14px;
+  }
+}

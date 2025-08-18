@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  <link rel="icon" href="/Pictures_Thumbnails/Tab-Icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/Files_CSS/Login-Style.css">
+</head>
+
+<body>
+  <div class="Container">
+    <div class="ContainerTitle">Log In</div>
+    <input id="UsernameInput" type="text" placeholder="Username" class="InputField">
+    <input id="PasswordInput" type="password" placeholder="Password" class="InputField">
+    <button id="LoginButton" class="LoginButton">Log In</button>
+    <div id="ErrorLabel" class="ErrorLabel"></div>
+    <div class="ContainerFooter">
+      <div>Don't have an account?</div>
+      <button id="ToSignupButton" class="ContainerChangeButton">Sign Up</button>
+    </div>
+  </div>
+  <button id="ResetButton" class="ResetButton">Reset</button>
+  <script src="/Files_JS/Handler-Save.js"></script>
+  <script src="/Files_JS/Handler-Auth.js"></script>
+  <script>
+    SetupLogin();
+    document.getElementById("ResetButton").addEventListener("click", () => {
+      if (confirm("Are you sure you want to clear all saved data? This cannot be undone.")) {
+        ClearAllData();
+        location.reload();
+      }
+    });
+  </script>
+</body>
+
+</html>

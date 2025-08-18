@@ -1,0 +1,505 @@
+/* Home-Child-Style.css — streamlined spacing, smooth progress bars, tidy Daily/Time cards */
+
+* {
+    box-sizing: border-box;
+    font-family: 'Fredoka', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --green: #4caf50;
+    --green-dark: #2e7d32;
+    --muted: #6b8f5a;
+    --card-bg: #ffffff;
+
+    --inner-padding: 10px;
+    /* compact but even inner edge spacing */
+    --gap: 10px;
+    /* consistent gaps */
+    --right-width: 360px;
+    /* right column width */
+}
+
+/* Background & page scrolling */
+body {
+    background: url("/Pictures_Thumbnails/Background.png") no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    color: var(--green-dark);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    /* single page scrollbar */
+}
+
+/* NAVBAR (unchanged) */
+.NavBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f9fff6;
+    border-bottom: 4px solid var(--green);
+    height: 70px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .12);
+    z-index: 20000;
+}
+
+.NavLeft {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.LogoText {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--green);
+    user-select: none;
+}
+
+.NavLinks {
+    display: flex;
+    gap: 10px;
+}
+
+.NavLinkButton {
+    padding: 10px 18px;
+    background: var(--green);
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 3px 6px rgba(76, 175, 80, .45);
+    transition: transform .12s;
+}
+
+.ProfileContainer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ProfilePicture {
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+    border: 3px solid #4caf50;
+    object-fit: cover;
+}
+
+.Username {
+    font-weight: 700;
+    color: #357a38;
+    font-size: 1.1rem;
+}
+
+.PlayerLevelDisplay {
+    font-weight: 700;
+    color: #4a7c1a;
+    font-size: 0.9rem;
+}
+
+/* Inner UI wrapper (spacing applies only to inner content, not navbar) */
+.InnerUI {
+    margin: 12px;
+    padding: var(--inner-padding);
+}
+
+/* Layout grid */
+.InnerGrid {
+    display: grid;
+    grid-template-columns: 1fr var(--right-width);
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+        "achievements right"
+        "shop shop"
+        "badges badges";
+    gap: var(--gap);
+    align-items: start;
+}
+
+.Card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .06);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.CardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.CardHeader h2,
+.CardHeader h3 {
+    margin: 0;
+    font-size: 1.02rem;
+    color: var(--green-dark);
+}
+
+.CardHint {
+    color: var(--muted);
+    font-size: 0.86rem;
+}
+
+.CardHeaderRight {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Coin pill in Shop header */
+.CoinDisplay {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 800;
+    background: #f0fff3;
+    color: #1b5e20;
+    border: 1px solid rgba(76, 175, 80, .25);
+}
+
+/* Achievements */
+.AchievementsCard {
+    grid-area: achievements;
+    display: flex;
+    flex-direction: column;
+    min-height: 220px;
+}
+
+.AchievementsList {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.Achievement {
+    background: #f9fff5;
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    will-change: transform;
+    transition: transform .18s, box-shadow .18s;
+}
+
+.Achievement:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(0, 0, 0, .08);
+}
+
+.AchievementHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+
+.AchievementTitle {
+    font-weight: 800;
+    color: var(--green-dark);
+    font-size: 1.02rem;
+}
+
+.AchievementLevel {
+    font-weight: 800;
+    color: #3b7a2f;
+}
+
+/* Smoother progress bar (GPU accelerated) */
+.ProgressBar {
+    width: 100%;
+    height: 16px;
+    background: #eaf6e7;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.ProgressFill {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #aed581, #7cb342);
+    transform-origin: left center;
+    transform: scaleX(0);
+    /* JS sets scaleX(percent) */
+    will-change: transform;
+    transition: transform 450ms cubic-bezier(.2, .9, .25, 1);
+}
+
+.AchievementDescription {
+    color: var(--muted);
+    font-size: 0.95rem;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height .24s, opacity .24s;
+}
+
+.ProgressFraction {
+    font-weight: 700;
+    color: var(--green-dark);
+    opacity: 0;
+    transition: opacity .24s;
+}
+
+.Achievement.expanded .AchievementDescription {
+    max-height: 180px;
+    opacity: 1;
+}
+
+.Achievement.expanded .ProgressFraction {
+    opacity: 1;
+}
+
+/* Right column (stretches to Achievements height visually) */
+.RightColumn {
+    grid-area: right;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.RightColumn>.Card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Tight, content-fitting cards */
+.TimePlayedCard {
+    flex: 0 0 auto;
+}
+
+.DailyCard {
+    flex: 1 1 auto;
+}
+
+/* Time played visuals */
+.TimePlayedInner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ProgressRing {
+    width: 96px;
+    height: 96px;
+    flex: 0 0 96px;
+}
+
+.ProgressRingText {
+    font-weight: 700;
+    fill: var(--green-dark);
+    font-size: 0.78rem;
+    dominant-baseline: middle;
+    text-anchor: middle;
+}
+
+.TimeInfo .TimeValue {
+    font-weight: 800;
+    color: var(--green-dark);
+    font-size: 0.96rem;
+}
+
+.TimeHint {
+    color: var(--muted);
+    font-size: 0.86rem;
+}
+
+/* Daily reward — compact, no excess container space */
+.DailyInner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 0;
+}
+
+.DailyInfo {
+    font-size: 0.98rem;
+    color: var(--green-dark);
+}
+
+.DailyActions {
+    display: flex;
+    align-items: center;
+}
+
+.DailyActions .NavLinkButton {
+    padding: 8px 14px;
+}
+
+/* Shop */
+.ShopCardFull {
+    grid-area: shop;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ShopListFull {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+@media (max-width: 1200px) {
+    .ShopListFull {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ShopItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: #f1fff2;
+    padding: 8px;
+    border-radius: 10px;
+}
+
+.ShopMeta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.ShopItem img {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex: 0 0 44px;
+}
+
+.ShopItem .title {
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: #1b5e20;
+}
+
+.ShopItem .desc {
+    font-size: 0.84rem;
+    color: #4a7c1a;
+    margin-top: 2px;
+}
+
+/* Buttons */
+.ShopBuy {
+    background: var(--green);
+    color: #fff;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 800;
+}
+
+.ShopBuy:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+/* Badges — full width under shop */
+.BadgesCardFull {
+    grid-area: badges;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.BadgesGridFull {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.BadgeTile {
+    width: 100px;
+    background: #fff7f0;
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+}
+
+.BadgeTile img {
+    width: 100%;
+    height: 66px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.BadgeName {
+    font-weight: 800;
+    color: #fff;
+    padding: 6px 8px;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 0.86rem;
+    background: rgba(0, 0, 0, .35);
+}
+
+/* Transient banner */
+.TransientBanner {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 12%;
+    padding: 10px 18px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #f8fff1, #e6f8e6);
+    color: #186a16;
+    font-weight: 800;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .25);
+    z-index: 1500;
+    opacity: 0;
+    transition: opacity .24s;
+    pointer-events: none;
+}
+
+/* Focus outline */
+:focus {
+    outline: 3px solid rgba(76, 175, 80, .16);
+    outline-offset: 3px;
+}
+
+/* Responsive stacking */
+@media (max-width: 1000px) {
+    .InnerGrid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "achievements"
+            "right"
+            "shop"
+            "badges";
+    }
+
+    .DailyInner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .ShopListFull {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,120 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Fredoka', sans-serif;
+}
+
+body {
+    background: url("/Pictures_Thumbnails/Background.png") no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.Container {
+    background: rgba(255, 255, 255, 0.8);
+    border: 4px solid #8bc34a;
+    border-radius: 20px;
+    width: 340px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #33691e;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.ContainerTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #558b2f;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.InputField {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    background: #f1f8e9;
+    border: 2px solid #aed581;
+    border-radius: 10px;
+    color: #33691e;
+    font-size: 14px;
+    text-align: center;
+    transition: background 0.2s, border 0.2s;
+}
+
+.InputField::placeholder {
+    color: #8bc34a;
+}
+
+.InputField:focus {
+    background: #dcedc8;
+    border-color: #7cb342;
+}
+
+.RadioContainer {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 12px 0;
+    font-size: 12px;
+    color: #33691e;
+}
+
+.LoginButton {
+    width: 100%;
+    padding: 14px;
+    margin-top: 16px;
+    background: #8bc34a;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.LoginButton:hover {
+    background: #7cb342;
+}
+
+.ErrorLabel {
+    font-size: 12px;
+    color: #d32f2f;
+    text-align: center;
+    margin-top: 10px;
+    min-height: 16px;
+}
+
+.ContainerFooter {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    font-size: 10px;
+    color: #33691e;
+}
+
+.ContainerChangeButton {
+    font-size: 10px;
+    padding: 6px 12px;
+    background: #8bc34a;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+}
+
+.ContainerChangeButton:hover {
+    background: #7cb342;
+}
