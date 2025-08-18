@@ -15,15 +15,15 @@ function SetupLogin() {
       SaveManager.EnsureUser(Username);
       window.location.href =
         Users[Username].AccountType === "Child"
-          ? "/Files_HTML/Child-Home.html"
-          : "/Files_HTML/Adult-Home.html";
+          ? "Files_HTML/Child-Home.html"
+          : "Files_HTML/Adult-Home.html";
     } else {
       ErrorLabel.textContent = "Invalid username or password.";
     }
   });
 
   ToSignupButton.addEventListener("click", () => {
-    window.location.href = "/Files_HTML/Auth-SignUp.html";
+    window.location.href = "Files_HTML/Auth-SignUp.html";
   });
 }
 
@@ -63,12 +63,12 @@ function SetupSignup() {
 
     window.location.href =
       AccountType === "Child"
-        ? "/Files_HTML/Child-Home.html"
-        : "/Files_HTML/Adult-Home.html";
+        ? "Files_HTML/Child-Home.html"
+        : "Files_HTML/Adult-Home.html";
   });
 
   ToLoginButton.addEventListener("click", () => {
-    window.location.href = "/index.html";
+    window.location.href = "index.html";
   });
 }
 
