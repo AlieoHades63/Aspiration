@@ -68,7 +68,7 @@ function SetupSignup() {
   });
 
   ToLoginButton.addEventListener("click", () => {
-    window.location.href = "/Files_HTML/Auth-Login.html";
+    window.location.href = "/Files_HTML/index.html";
   });
 }
 

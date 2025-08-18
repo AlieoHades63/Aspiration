@@ -72,9 +72,106 @@
   ];
 
   const QuestionBank = [
-    { Question: "What color is the sky?", Choices: ["Blue", "Green", "Red", "Yellow"], AnswerIndex: 0 },
-    { Question: "How many legs does a spider have?", Choices: ["8", "6", "4", "10"], AnswerIndex: 0 },
-    { Question: "Which one is a fruit?", Choices: ["Apple", "Carrot", "Potato", "Onion"], AnswerIndex: 0 }
+    {
+      Question: "If your friend says 'HI!' to you, what is the best way to answer?",
+      Choices: ["Say 'Hi!' back and smile", "Run away", "Ignore them", "Yell 'Stop!'"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If you want to get something, what should you do?",
+      Choices: ["Yell, 'Give it to me!'", "Say, 'Can you please give that to me?'", "Fuss about it", "Annoy them until they give up"],
+      AnswerIndex: 1
+    },
+    {
+      Question: "If you bump into someone by accident, what should you do?",
+      Choices: ["Yell 'Move!'", "Tell them it’s their fault", "Say 'Sorry.'", "Pretend it never happened"],
+      AnswerIndex: 2
+    },
+    {
+      Question: "Your teacher asks you a question, but you don’t know the answer, should you?",
+      Choices: ["Tell them you don’t care", "Kindly ask them for help", "Ignore them", "Bug your buddy for the answer"],
+      AnswerIndex: 1
+    },
+    {
+      Question: "If you want to use something that someone is already using, what should you do?",
+      Choices: ["Say 'Can you please share that with me?'", "Yell at them and hope they give it to you", "Grab it from them", "Yell 'Give that to me!'"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If you want to join a game with other kids, what should you do?",
+      Choices: ["Ask 'Can I play with you'", "Push them aside", "Yell at them", "Cry"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If you are feeling sad, what is the best thing to do?",
+      Choices: ["Tell an adult that you are feeling sad.", "Throw your stuff", "Yell at everyone", "Do nothing"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If your friend shares their snack with you, what should you say?",
+      Choices: ["'Why did you do that?'", "'Go away'", "'Thanks!'", "Pretend they don’t exist"],
+      AnswerIndex: 2
+    },
+    {
+      Question: "If someone says 'thank you' to you, what should you say?",
+      Choices: ["'You’re welcome!'", "'Whatever'", "'Leave me alone'", "Ignore them"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If you have to leave your friend’s house, what is the best thing to do?",
+      Choices: ["Tell someone that you’re leaving before leaving", "Run away", "Yell, 'I’m leaving'", "Just leave before anyone notices"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If you want to know what someone is doing, what is a polite way to ask?",
+      Choices: ["'Hey, what are you doing?'", "Be rude to them", "'Stop and tell me what you’re doing NOW!'", "Prevent them from doing what they are doing until they say something"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If you hear your name, what should you do?",
+      Choices: ["Ignore it", "Say, 'What’s up?'", "Scream at them to shut up", "Walk away so you can’t hear them"],
+      AnswerIndex: 1
+    },
+    {
+      Question: "If your friend is talking about their day, what should you do?",
+      Choices: ["Listen quietly.", "Talk only about yourself", "Interrupt them", "Leave"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If you want to sit next to someone, what can you say?",
+      Choices: ["'Hey, can I sit here?'", "Yell at them to move over", "Push them aside", "Sit without asking"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If you make a mistake, what can you say?",
+      Choices: ["'I’m sorry!'", "'It’s all your fault'", "'I don’t care, go away'", "Laugh at the other person and call names"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If someone helps you out with something, what can you tell them?",
+      Choices: ["'Thank you so much'", "'Just leave already. I don’t need you'", "Go away", "'Why did you do that?'"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If you want someone to wait for you, what should you say?",
+      Choices: ["'Please wait for me!'", "Scream at them", "Say nothing", "Try to catch up to them"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If someone is feeling angry, what can you do?",
+      Choices: ["Cheer them up", "Annoy them even more", "Tell them they aren’t worth anything", "Call them stupid for feeling sad"],
+      AnswerIndex: 0
+    },
+    {
+      Question: "If you want to play a different game, what should you say?",
+      Choices: ["'This is rigged, you are trying to cheat me!'", "'This is boring, you are dumb to be playing this'", "Leave and don’t give a reason why", "'Can we play something else guys?'"],
+      AnswerIndex: 3
+    },
+    {
+      Question: "If someone gives you a gift, what should you say?",
+      Choices: ["'Only one?'", "'Why did you give me this?'", "'Thank you so much!'", "Grab it from them and quickly put it away"],
+      AnswerIndex: 2
+    }
   ];
 
   /* -------------------------
