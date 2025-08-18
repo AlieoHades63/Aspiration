@@ -17,7 +17,7 @@
 }
 
 body {
-  background: url("/Pictures_Thumbnails/Background.png") no-repeat center center fixed;
+  background: url("../Pictures_Thumbnails/Background.png") no-repeat center center fixed;
   background-size: cover;
   height: 100vh;
   display: flex;
