@@ -54,21 +54,21 @@
   }
 
   const Images = {
-    Player: LoadImage("../Pictures_Assets/Player.png"),
-    Ground: LoadImage("../Pictures_Assets/Ground.png"),
-    Sand: LoadImage("../Pictures_Assets/Sand.png"),
-    Water: LoadImage("../Pictures_Assets/Water.png"),
-    Tree: LoadImage("../Pictures_Assets/Tree.png"),
-    Flower: LoadImage("../Pictures_Assets/Flower.png"),
-    Grass: LoadImage("../Pictures_Assets/Grass.png"),
-    Rock: LoadImage("../Pictures_Assets/Rock.png")
+    Player: LoadImage("Pictures_Assets/Player.png"),
+    Ground: LoadImage("Pictures_Assets/Ground.png"),
+    Sand: LoadImage("Pictures_Assets/Sand.png"),
+    Water: LoadImage("Pictures_Assets/Water.png"),
+    Tree: LoadImage("Pictures_Assets/Tree.png"),
+    Flower: LoadImage("Pictures_Assets/Flower.png"),
+    Grass: LoadImage("Pictures_Assets/Grass.png"),
+    Rock: LoadImage("Pictures_Assets/Rock.png")
   };
 
   const NpcImages = [
-    LoadImage("../Pictures_Assets/Npc1.png"),
-    LoadImage("../Pictures_Assets/Npc2.png"),
-    LoadImage("../Pictures_Assets/Npc3.png"),
-    LoadImage("../Pictures_Assets/Npc4.png")
+    LoadImage("Pictures_Assets/Npc1.png"),
+    LoadImage("Pictures_Assets/Npc2.png"),
+    LoadImage("Pictures_Assets/Npc3.png"),
+    LoadImage("Pictures_Assets/Npc4.png")
   ];
 
   const QuestionBank = [
@@ -1426,12 +1426,12 @@
     const playBtn = document.getElementById("NavPlayBtn");
     if (homeBtn) {
       homeBtn.addEventListener("click", () => {
-        window.location.href = "../Files_HTML/Child-Home.html";
+        window.location.href = "Files_HTML/Child-Home.html";
       });
     }
     if (playBtn) {
       playBtn.addEventListener("click", () => {
-        window.location.href = "../Files_HTML/Child-Play.html";
+        window.location.href = "Files_HTML/Child-Play.html";
       });
     }
 

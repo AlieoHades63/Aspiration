@@ -101,9 +101,9 @@
             meta.className = "ShopMeta";
 
             const img = document.createElement("img");
-            img.src = it.img || "../Pictures_Thumbnails/Tab-Icon.png";
+            img.src = it.img || "Pictures_Thumbnails/Tab-Icon.png";
             img.alt = it.title;
-            img.onerror = () => { img.src = "../Pictures_Thumbnails/Tab-Icon.png"; };
+            img.onerror = () => { img.src = "Pictures_Thumbnails/Tab-Icon.png"; };
 
             const txt = document.createElement("div");
             txt.innerHTML = `<div class="title">${escapeHtml(it.title)}</div>
@@ -308,9 +308,9 @@
             const tile = document.createElement("div");
             tile.className = "BadgeTile";
             const img = document.createElement("img");
-            img.src = b.img || "../Pictures_Thumbnails/Tab-Icon.png";
+            img.src = b.img || "Pictures_Thumbnails/Tab-Icon.png";
             img.alt = b.name || "";
-            img.onerror = () => { img.src = "../Pictures_Thumbnails/Tab-Icon.png"; };
+            img.onerror = () => { img.src = "Pictures_Thumbnails/Tab-Icon.png"; };
             tile.appendChild(img);
             const name = document.createElement("div");
             name.className = "BadgeName";
@@ -388,8 +388,8 @@
     // Nav buttons
     const navHome = document.getElementById("NavHomeBtn");
     const navPlay = document.getElementById("NavPlayBtn");
-    if (navHome) navHome.addEventListener("click", () => location.href = "../Files_HTML/Child-Home.html");
-    if (navPlay) navPlay.addEventListener("click", () => location.href = "../Files_HTML/Child-Play.html");
+    if (navHome) navHome.addEventListener("click", () => location.href = "Files_HTML/Child-Home.html");
+    if (navPlay) navPlay.addEventListener("click", () => location.href = "Files_HTML/Child-Play.html");
 
     function updateHeaderUser() {
         if (UsernameDisplay) UsernameDisplay.textContent = SaveManager.GetCurrentUser() || "Guest";

@@ -39,23 +39,23 @@ window.GameDefs = {
 
   // Only badges that correspond to achievements
   BADGES: [
-    { id: "badge_help_1", name: "Helper I", img: "../Pictures_Thumbnails/BadgeHelp1.png" },
-    { id: "badge_help_2", name: "Helper II", img: "../Pictures_Thumbnails/BadgeHelp2.png" },
-    { id: "badge_help_3", name: "Helper III", img: "../Pictures_Thumbnails/BadgeHelp3.png" },
+    { id: "badge_help_1", name: "Helper I", img: "Pictures_Thumbnails/BadgeHelp1.png" },
+    { id: "badge_help_2", name: "Helper II", img: "Pictures_Thumbnails/BadgeHelp2.png" },
+    { id: "badge_help_3", name: "Helper III", img: "Pictures_Thumbnails/BadgeHelp3.png" },
 
-    { id: "badge_collector_1", name: "Coins I", img: "../Pictures_Thumbnails/CoinCollector1.png" },
-    { id: "badge_collector_2", name: "Coins II", img: "../Pictures_Thumbnails/CoinCollector2.png" },
-    { id: "badge_collector_3", name: "Coins III", img: "../Pictures_Thumbnails/CoinCollector3.png" },
+    { id: "badge_collector_1", name: "Coins I", img: "Pictures_Thumbnails/CoinCollector1.png" },
+    { id: "badge_collector_2", name: "Coins II", img: "Pictures_Thumbnails/CoinCollector2.png" },
+    { id: "badge_collector_3", name: "Coins III", img: "Pictures_Thumbnails/CoinCollector3.png" },
 
-    { id: "badge_explorer_1", name: "Explorer I", img: "../Pictures_Thumbnails/BadgeExplorer1.png" },
-    { id: "badge_explorer_2", name: "Explorer II", img: "../Pictures_Thumbnails/BadgeExplorer2.png" },
-    { id: "badge_explorer_3", name: "Explorer III", img: "../Pictures_Thumbnails/BadgeExplorer3.png" }
+    { id: "badge_explorer_1", name: "Explorer I", img: "Pictures_Thumbnails/BadgeExplorer1.png" },
+    { id: "badge_explorer_2", name: "Explorer II", img: "Pictures_Thumbnails/BadgeExplorer2.png" },
+    { id: "badge_explorer_3", name: "Explorer III", img: "Pictures_Thumbnails/BadgeExplorer3.png" }
   ],
 
   SHOP: [
-    { id: "mul_1", title: "Coin x1.5", desc: "Increases coin rewards by 1.5x", cost: 250, img: "../Pictures_Thumbnails/Mul1.5x.png", effect: { type: "multiplier", key: "CoinGain", value: 1.5 } },
-    { id: "mul_2", title: "Coin x2", desc: "Increases coin rewards by 2x", cost: 950, img: "../Pictures_Thumbnails/Mul2x.png", effect: { type: "multiplier", key: "CoinGain", value: 2 } },
-    { id: "hat_red", title: "Red Hat", desc: "Cool cosmetic for your player", cost: 500, img: "../Pictures_Thumbnails/RedHat.png", effect: { type: "cosmetic", key: "HatRed", value: true } }
+    { id: "mul_1", title: "Coin x1.5", desc: "Increases coin rewards by 1.5x", cost: 250, img: "Pictures_Thumbnails/Mul1.5x.png", effect: { type: "multiplier", key: "CoinGain", value: 1.5 } },
+    { id: "mul_2", title: "Coin x2", desc: "Increases coin rewards by 2x", cost: 950, img: "Pictures_Thumbnails/Mul2x.png", effect: { type: "multiplier", key: "CoinGain", value: 2 } },
+    { id: "hat_red", title: "Red Hat", desc: "Cool cosmetic for your player", cost: 500, img: "Pictures_Thumbnails/RedHat.png", effect: { type: "cosmetic", key: "HatRed", value: true } }
   ],
 
   // --- Fixed Achievements Backend ---
