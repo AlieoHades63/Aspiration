@@ -16,7 +16,7 @@ function SetupLogin() {
       window.location.href =
         Users[Username].AccountType === "Child"
           ? "../Files_HTML/Child-Home.html"
-          : "../Files_HTML/Adult-Home.html";
+          : "../Files_HTML/Child-Home.html";
     } else {
       ErrorLabel.textContent = "Invalid username or password.";
     }
@@ -64,7 +64,7 @@ function SetupSignup() {
     window.location.href =
       AccountType === "Child"
         ? "../Files_HTML/Child-Home.html"
-        : "../Files_HTML/Adult-Home.html";
+        : "../Files_HTML/Child-Home.html";
   });
 
   ToLoginButton.addEventListener("click", () => {
