@@ -28,7 +28,7 @@ function SetupLogin() {
 }
 
 function SetupSignup() {
-  SaveManager.SetCurrentUser(null); // Clear current user
+  SaveManager.SetCurrentUser(null);
 
   const SignupButton = document.getElementById("SignupButton");
   const ToLoginButton = document.getElementById("ToLoginButton");

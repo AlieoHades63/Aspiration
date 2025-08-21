@@ -1,4 +1,3 @@
-/* Handler-Game.js (FULL) */
 (function () {
   const Canvas = document.getElementById("GameCanvas");
   const Ctx = Canvas && Canvas.getContext ? Canvas.getContext("2d") : null;
@@ -32,19 +31,14 @@
   const CoinsAmountEl = document.createElement("span");
   CoinsAmountEl.className = "CoinsAmount";
 
-  /* Timing variables for frame-synced updates */
   let lastFrameTs = performance.now();
   let accumulated = 0;
   const MAX_DT = 0.05;
 
-  /* Device pixel ratio tracking */
   let lastCanvasClientWidth = 0;
   let lastCanvasClientHeight = 0;
   let lastDPR = 0;
 
-  /* -------------------------
-     Asset loading
-     ------------------------- */
   function LoadImage(Src) {
     const Img = new Image();
     Img.onload = () => (Img.loaded = true);
@@ -124,7 +118,7 @@
     },
     {
       Question: "If you want to know what someone is doing, what is a polite way to ask?",
-      Choices: ["'Hey, what are you doing?'", "Be rude to them", "'Stop and tell me what you’re doing NOW!'", "Prevent them from doing what they are doing until they say something"],
+      Choices: ["'Hey, what are you doing?'", "Be rude to them", "'Stop and tell me what you’re doing NOW!'", "Stop them from doing what they are doing until they say something"],
       AnswerIndex: 0
     },
     {
@@ -174,9 +168,6 @@
     }
   ];
 
-  /* -------------------------
-     RNG / Noise helpers
-     ------------------------- */
   function Mulberry32(seed) {
     return () => {
       let t = (seed += 0x6d2b79f5);
@@ -238,7 +229,6 @@
     return Mulberry32((x * 73856093) ^ (y * 19349663) ^ s)();
   }
 
-  /* instantiate base noises */
   const WorldSeed = SaveManager.GetWorldSeed(Username);
   const BaseElevationNoise = PerlinNoiseAlgorithm(WorldSeed + (WorldSeed * 0.2));
   const BaseRiverNoise = PerlinNoiseAlgorithm(WorldSeed + (WorldSeed * 0.3));
@@ -252,7 +242,6 @@
   function TreeNoise(x, y) { return FractalNoise(BaseTreeNoise, x, y, 4, 0.55, 2); }
   function GrassNoise(x, y) { return FractalNoise(BaseGrassNoise, x, y, 4, 0.55, 2); }
 
-  /* ------------------------- Tile & NPC spawning (unchanged) ------------------------- */
   function IsNpcNearby(x, y, d = 3) {
     const dsq = d * d;
     for (const n of Npcs) if ((n.WorldX - x) ** 2 + (n.WorldY - y) ** 2 < dsq) return true;
@@ -352,9 +341,6 @@
     return (Cache[key] = type);
   }
 
-  /* -------------------------
-     Drawing helpers & UI effects
-     ------------------------- */
   function DrawImage(img, fallback, x, y, w = BlockSize, h = BlockSize) {
     if (!Ctx) return;
     if (img && img.loaded && !img.failed && img.complete && img.naturalWidth > 0) {
@@ -427,9 +413,6 @@
     } catch { }
   }
 
-  /* -------------------------
-     AddCoins
-     ------------------------- */
   function AddCoins(amount = 0, animate = true) {
     amount = Number(amount) || 0;
     if (amount === 0) return;
@@ -481,9 +464,6 @@
     return v.toFixed(idx ? 1 : 0).replace(/\.0$/, "") + Suffixes[idx];
   }
 
-  /* -------------------------
-     Interaction UI
-     ------------------------- */
   function PopulateChoices(question) {
     if (!ChoicesContainer) return;
     ChoicesContainer.innerHTML = "";
@@ -534,7 +514,6 @@
     }
   }
 
-  /* Submit and close interaction */
   function SubmitChoice() {
     if (!CurrentInteraction.question) return;
     const choice = CurrentInteraction.selectedChoice;
@@ -583,9 +562,6 @@
     if (Canvas) Canvas.focus();
   }
 
-  /* -------------------------
-     Opening an interaction
-     ------------------------- */
   function OpenInteractionWithNpc(npc) {
     if (!npc) return;
     if (CurrentInteraction.show) return;
@@ -629,9 +605,6 @@
     try { TutorialManager.onUserTalkToNpc(); } catch (e) { }
   }
 
-  /* -------------------------
-     TryInteract - find nearest NPC within radius
-     ------------------------- */
   function TryInteract() {
     if (CurrentInteraction.show) return;
     const tx = Math.floor(Player.X / BlockSize);
@@ -657,9 +630,6 @@
     OpenInteractionWithNpc(chosen);
   }
 
-  /* -------------------------
-     Transient banner
-     ------------------------- */
   function showTemporaryBanner(text, time = 1800) {
     let b = document.getElementById("TransientBanner");
     if (!b) {
@@ -685,9 +655,6 @@
     b._t = setTimeout(() => (b.style.opacity = "0"), time);
   }
 
-  /* -------------------------
-     HUD & Top dock positioning + UpdateHUD
-     ------------------------- */
   function positionTopDock() {
     if (!TopControlDock || !Canvas) return;
     const canvasRect = Canvas.getBoundingClientRect();
@@ -714,7 +681,6 @@
         TopControlDock.setAttribute("aria-hidden", "false");
         positionTopDock();
       }
-      // Also ensure TopRightControls remain visible
       if (TopRightControls) TopRightControls.style.display = "flex";
     } else {
       hud.classList.remove("hidden");
@@ -722,16 +688,12 @@
         TopControlDock.style.display = "none";
         TopControlDock.setAttribute("aria-hidden", "true");
       }
-      // Ensure TopRightControls still present on the right
       if (TopRightControls) TopRightControls.style.display = "flex";
     }
     const toggleBtn = document.getElementById("HUDToggleBtn");
     if (toggleBtn) toggleBtn.textContent = collapsed ? "+" : "—";
   }
 
-  /* -------------------------
-     Input handling
-     ------------------------- */
   document.addEventListener("keydown", (e) => {
     const key = e.key;
     const lk = key.toLowerCase();
@@ -760,7 +722,6 @@
     }
   });
 
-  /* keyboard nav in question UI */
   function handleInteractionNavigation(key, e) {
     if (!CurrentInteraction.question) return;
     const cols = 2;
@@ -811,9 +772,6 @@
     if (key === "Escape") { CloseInteraction(); e.preventDefault(); return; }
   }
 
-  /* -------------------------
-     TutorialManager
-     ------------------------- */
   const TutorialManager = (function () {
     let active = false;
     let overlay = null;
@@ -1061,9 +1019,6 @@
     return { startIfNeeded, isActive: () => active, onKeyPressed, onUserTalkToNpc, updatePointerToClosestNpc };
   })();
 
-  /* -------------------------
-     Timers & saving
-     ------------------------- */
   let secondsPlayed = SaveManager.GetTimePlayed(Username) || 0;
   let playTick = null;
   let tabVisible = document.visibilityState === "visible";
@@ -1098,9 +1053,6 @@
 
   document.addEventListener("visibilitychange", () => { tabVisible = document.visibilityState === "visible"; });
 
-  /* -------------------------
-     Proximity prompt handlers
-     ------------------------- */
   if (ProximityPromptEl) {
     ProximityPromptEl.addEventListener("click", (ev) => { ev.preventDefault(); TryInteract(); });
     ProximityPromptEl.addEventListener("contextmenu", (ev) => { ev.preventDefault(); TryInteract(); });
@@ -1110,9 +1062,6 @@
     });
   }
 
-  /* -------------------------
-     UI init & event wiring
-     ------------------------- */
   function UpdateUsernameUI() {
     try {
       const nodes = document.querySelectorAll("#UsernameDisplay, .Username, .UsernameDisplay");
@@ -1122,14 +1071,13 @@
         else el.textContent = name;
       });
 
-      // Update nav-level small display if present
       const navLevel = document.getElementById("PlayerLevelDisplay");
       const playerLevel = SaveManager.GetLevel ? (SaveManager.GetLevel(Username) || 1) : (SaveManager.GetUserData(Username)?.Level || 1);
       if (navLevel) navLevel.textContent = `Lv ${playerLevel}`;
       const hudLevel = document.getElementById("PlayerLevel");
       if (hudLevel) hudLevel.textContent = `${playerLevel}`;
 
-    } catch (e) { /* ignore DOM update errors */ }
+    } catch (e) { }
   }
 
   function initUIControls() {
@@ -1210,17 +1158,12 @@
     });
     window.addEventListener("scroll", positionTopDock);
 
-    // Make sure username text updated now
     UpdateUsernameUI();
     UpdateCoinsUI();
 
-    // Ensure TopRightControls visible
     if (TopRightControls) TopRightControls.style.display = TopRightControls.style.display || "flex";
   }
 
-  /* -------------------------
-     Canvas DPI / Resize helpers
-     ------------------------- */
   function resizeCanvasForDisplay() {
     if (!Canvas || !Ctx) return;
 
@@ -1251,9 +1194,6 @@
     Draw();
   }
 
-  /* -------------------------
-     Main Draw & Update
-     ------------------------- */
   function Draw() {
     if (!Canvas || !Ctx) return;
     const cw = Canvas.clientWidth || window.innerWidth;
@@ -1344,7 +1284,6 @@
     }
   }
 
-  /* Update(dt) */
   function Update(dt) {
     if (!CurrentInteraction.show) {
       const speed = 200;
@@ -1363,9 +1302,6 @@
     }
   }
 
-  /* -------------------------
-     Animation loop
-     ------------------------- */
   function GameLoop(ts) {
     if (!ts) ts = performance.now();
     let rawDt = (ts - lastFrameTs) / 1000;
@@ -1378,9 +1314,6 @@
     requestAnimationFrame(GameLoop);
   }
 
-  /* -------------------------
-     Init & wiring
-     ------------------------- */
   function InitPlayerPosition() {
     const pos = SaveManager.GetPlayerPosition ? SaveManager.GetPlayerPosition(Username) : { X: 0, Y: 0 };
     Player.X = pos.X || 0;
@@ -1399,7 +1332,6 @@
     startLocalPlayTimer();
   }
 
-  /* ensure top dock positioned and visible when HUD collapsed */
   positionTopDock();
 
   lastFrameTs = performance.now();
@@ -1416,12 +1348,7 @@
     resizeCanvasForDisplay
   };
 
-  /* -------------------------
-     Additional DOM wiring: nav, shop, initial UI fixups
-     ------------------------- */
-  // Use DOMContentLoaded to ensure elements exist
   document.addEventListener("DOMContentLoaded", () => {
-    // Nav buttons - keep routes consistent with home file names
     const homeBtn = document.getElementById("NavHomeBtn");
     const playBtn = document.getElementById("NavPlayBtn");
     if (homeBtn) {
@@ -1435,11 +1362,9 @@
       });
     }
 
-    // Ensure top dock is positioned and username updated after DOM load
     positionTopDock();
     UpdateUsernameUI();
 
-    // Shop wiring (in case shop was hidden by default)
     const shopOpen = document.getElementById("ShopOpenBtn");
     const shopPanel = document.getElementById("ShopPanel");
     const closeShop = document.getElementById("CloseShopBtn");
@@ -1458,7 +1383,6 @@
       });
     }
 
-    // Ensure TopRightControls visible
     if (TopRightControls) {
       TopRightControls.style.display = TopRightControls.style.display || "flex";
     }
