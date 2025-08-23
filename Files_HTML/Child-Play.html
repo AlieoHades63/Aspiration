@@ -32,7 +32,8 @@
   <main class="Container" role="main">
     <canvas id="GameCanvas" width="1024" height="640" aria-label="Game canvas" tabindex="0"></canvas>
 
-    <div id="ProximityPrompt" class="ProximityPrompt" aria-hidden="true" role="button" tabindex="-1">E</div>
+    <!-- Make prompt keyboard-focusable so Enter/Space can trigger interaction -->
+    <div id="ProximityPrompt" class="ProximityPrompt" aria-hidden="true" role="button" tabindex="0">E</div>
 
     <section id="QuestionUI" role="dialog" aria-modal="true" aria-hidden="true">
       <div id="QuestionBackdrop"></div>

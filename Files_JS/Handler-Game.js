@@ -8,6 +8,7 @@
   const ChoicesContainer = document.getElementById("ChoicesContainer") || (function () {
     const el = document.createElement("div");
     el.id = "ChoicesContainer";
+    el.className = "ChoicesContainer";
     el.setAttribute("role", "list");
     if (QuestionUI) QuestionUI.appendChild(el);
     return el;
@@ -32,7 +33,6 @@
   CoinsAmountEl.className = "CoinsAmount";
 
   let lastFrameTs = performance.now();
-  let accumulated = 0;
   const MAX_DT = 0.05;
 
   let lastCanvasClientWidth = 0;
@@ -65,6 +65,7 @@
     LoadImage("../Pictures_Assets/Npc4.png")
   ];
 
+  // FULL QuestionBank restored (copied from your original).
   const QuestionBank = [
     {
       Question: "If your friend says 'HI!' to you, what is the best way to answer?",
@@ -168,6 +169,7 @@
     }
   ];
 
+  /* ---------- RNG / noise / world generation ---------- */
   function Mulberry32(seed) {
     return () => {
       let t = (seed += 0x6d2b79f5);
@@ -367,17 +369,11 @@
     for (let i = 0; i < count; i++) {
       const c = document.createElement("div");
       c.className = "Confetti";
-      c.style.position = "fixed";
       c.style.left = `${x + (Math.random() * 40 - 20)}px`;
       c.style.top = `${y + (Math.random() * 10 - 5)}px`;
-      c.style.width = "8px";
-      c.style.height = "8px";
-      c.style.borderRadius = "2px";
       c.style.background = colors[Math.floor(Math.random() * colors.length)];
-      c.style.zIndex = 11000;
-      c.style.opacity = "0.95";
       document.body.appendChild(c);
-      setTimeout(() => c.remove(), 1100);
+      setTimeout(() => c.remove(), 1200);
     }
   }
 
@@ -385,23 +381,28 @@
     if (!CoinsUI) return;
     const coin = document.createElement("div");
     coin.className = "FlyCoin";
-    coin.style.position = "fixed";
     coin.style.left = `${fromX}px`;
     coin.style.top = `${fromY}px`;
-    coin.style.width = "18px";
-    coin.style.height = "18px";
-    coin.style.borderRadius = "50%";
     coin.style.background = "gold";
-    coin.style.zIndex = 11000;
     document.body.appendChild(coin);
     const coinsRect = CoinsUI.getBoundingClientRect();
     const dx = coinsRect.left - fromX + 20;
     const dy = coinsRect.top - fromY + 10;
-    coin.animate([
-      { transform: "translate(0,0) scale(1)", opacity: 1 },
-      { transform: `translate(${dx}px, ${dy}px) scale(0.6)`, opacity: 0.25 }
-    ], { duration: 700, easing: "cubic-bezier(.2,.9,.25,1)" });
-    setTimeout(() => coin.remove(), 800);
+
+    // animate using Web Animations API if available
+    if (coin.animate) {
+      coin.animate([
+        { transform: "translate(0,0) scale(1)", opacity: 1 },
+        { transform: `translate(${dx}px, ${dy}px) scale(0.6)`, opacity: 0.25 }
+      ], { duration: 700, easing: "cubic-bezier(.2,.9,.25,1)" });
+      setTimeout(() => coin.remove(), 800);
+    } else {
+      // fallback
+      coin.style.transition = "transform .7s cubic-bezier(.2,.9,.25,1), opacity .7s";
+      coin.style.transform = `translate(${dx}px, ${dy}px) scale(0.6)`;
+      coin.style.opacity = "0.25";
+      setTimeout(() => coin.remove(), 800);
+    }
   }
 
   function playSFX(aud) {
@@ -465,7 +466,7 @@
   }
 
   function PopulateChoices(question) {
-    if (!ChoicesContainer) return;
+    if (!ChoicesContainer || !question || !Array.isArray(question.Choices)) return;
     ChoicesContainer.innerHTML = "";
     question.Choices.forEach((text, index) => {
       const btn = document.createElement("div");
@@ -510,8 +511,60 @@
     });
     const selectedEl = ChoicesContainer.children[CurrentInteraction.selectedChoice];
     if (selectedEl && document.activeElement !== selectedEl) {
-      try { selectedEl.focus({ preventScroll: true }); } catch (e) { }
+      try { selectedEl.focus({ preventScroll: true }); } catch (e) { try { selectedEl.focus(); } catch (e2) { } }
     }
+  }
+
+  /* Focus trap for modal */
+  let _prevFocusedEl = null;
+  let _modalKeyHandler = null;
+
+  function setModalFocusTrap() {
+    if (!QuestionUI) return;
+    _prevFocusedEl = document.activeElement;
+    const focusables = () => Array.from(QuestionUI.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
+      .filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
+
+    _modalKeyHandler = function (ev) {
+      if (ev.key === 'Escape') {
+        ev.preventDefault();
+        CloseInteraction();
+        return;
+      }
+      if (ev.key !== 'Tab') return;
+      const list = focusables();
+      if (list.length === 0) {
+        ev.preventDefault();
+        return;
+      }
+      const first = list[0];
+      const last = list[list.length - 1];
+      if (ev.shiftKey) {
+        if (document.activeElement === first || document.activeElement === QuestionUI) {
+          last.focus();
+          ev.preventDefault();
+        }
+      } else {
+        if (document.activeElement === last) {
+          first.focus();
+          ev.preventDefault();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', _modalKeyHandler);
+  }
+
+  function removeModalFocusTrap() {
+    if (_modalKeyHandler) {
+      document.removeEventListener('keydown', _modalKeyHandler);
+      _modalKeyHandler = null;
+    }
+    try {
+      if (_prevFocusedEl && typeof _prevFocusedEl.focus === 'function') _prevFocusedEl.focus();
+      else if (Canvas) Canvas.focus();
+    } catch { }
+    _prevFocusedEl = null;
   }
 
   function SubmitChoice() {
@@ -559,6 +612,9 @@
       QuestionUI.setAttribute("aria-hidden", "true");
     }
     if (ChoicesContainer) ChoicesContainer.innerHTML = "";
+
+    removeModalFocusTrap();
+
     if (Canvas) Canvas.focus();
   }
 
@@ -574,7 +630,17 @@
       return;
     }
 
+    if (!Array.isArray(QuestionBank) || QuestionBank.length === 0) {
+      showTemporaryBanner("No questions available right now. Try again later!");
+      return;
+    }
+
     const q = QuestionBank[Math.floor(Math.random() * QuestionBank.length)];
+    if (!q || !Array.isArray(q.Choices)) {
+      showTemporaryBanner("This friend doesn't have a question right now. Try another friend.");
+      return;
+    }
+
     const choices = q.Choices.slice();
     const correct = q.AnswerIndex;
     const correctText = choices[correct];
@@ -583,8 +649,10 @@
       [choices[i], choices[j]] = [choices[j], choices[i]];
     }
     const newIndex = choices.indexOf(correctText);
+    // defensive: if newIndex === -1 (shouldn't happen) then find closest match or set to 0
+    const answerIndex = newIndex >= 0 ? newIndex : 0;
 
-    CurrentInteraction.question = { Question: q.Question, Choices: choices, AnswerIndex: newIndex };
+    CurrentInteraction.question = { Question: q.Question, Choices: choices, AnswerIndex: answerIndex };
     CurrentInteraction.selectedChoice = 0;
     CurrentInteraction.show = true;
     CurrentInteraction.npc = npc;
@@ -596,8 +664,13 @@
       QuestionUI.setAttribute("aria-hidden", "false");
     }
 
+    // focus first choice and trap focus in modal
     const first = ChoicesContainer.querySelector(".Choice");
-    if (first) first.focus();
+    if (first) {
+      try { first.focus(); } catch { }
+    }
+    setModalFocusTrap();
+
     UpdateChoiceHighlight();
 
     npc.lastInteracted = Date.now();
@@ -606,6 +679,11 @@
   }
 
   function TryInteract() {
+    if (TutorialManager.isActive() && !TutorialManager.canInteract()) {
+      showTemporaryBanner("Follow the tutorial first — you can interact after the guide points you.");
+      return;
+    }
+
     if (CurrentInteraction.show) return;
     const tx = Math.floor(Player.X / BlockSize);
     const ty = Math.floor(Player.Y / BlockSize);
@@ -635,24 +713,17 @@
     if (!b) {
       b = document.createElement("div");
       b.id = "TransientBanner";
-      b.style.position = "fixed";
-      b.style.left = "50%";
-      b.style.top = "12%";
-      b.style.transform = "translateX(-50%)";
-      b.style.padding = "10px 18px";
-      b.style.borderRadius = "12px";
-      b.style.boxShadow = "0 8px 20px rgba(0,0,0,0.25)";
-      b.style.background = "linear-gradient(180deg,#f8fff1,#e6f8e6)";
-      b.style.color = "#186a16";
-      b.style.fontWeight = "700";
-      b.style.zIndex = 10001;
-      b.style.transition = "opacity 280ms ease";
+      b.className = "TransientBanner";
       document.body.appendChild(b);
     }
     b.textContent = text;
-    b.style.opacity = "1";
+    b.classList.add("show");
+    b.setAttribute("aria-hidden", "false");
     clearTimeout(b._t);
-    b._t = setTimeout(() => (b.style.opacity = "0"), time);
+    b._t = setTimeout(() => {
+      b.classList.remove("show");
+      b.setAttribute("aria-hidden", "true");
+    }, time);
   }
 
   function positionTopDock() {
@@ -705,6 +776,10 @@
 
     if (lk === "e") {
       e.preventDefault();
+      if (TutorialManager.isActive() && !TutorialManager.canInteract()) {
+        showTemporaryBanner("Complete the tutorial step before interacting.");
+        return;
+      }
       if (CurrentInteraction.show) SubmitChoice();
       else TryInteract();
       return;
@@ -772,6 +847,7 @@
     if (key === "Escape") { CloseInteraction(); e.preventDefault(); return; }
   }
 
+  /* ---------- Tutorial Manager (pointer sits above player and points to NPC) ---------- */
   const TutorialManager = (function () {
     let active = false;
     let overlay = null;
@@ -825,8 +901,9 @@
       ov.style.display = "flex";
       const proceed = document.getElementById("TutProceed");
       const skip = document.getElementById("TutSkip");
-      if (proceed) proceed.addEventListener("click", proceedToCorner);
-      if (skip) skip.addEventListener("click", skipAll);
+      if (proceed) { proceed.onclick = null; proceed.addEventListener("click", proceedToCorner); }
+      if (skip) { skip.onclick = null; skip.addEventListener("click", skipAll); }
+      pressedKeys.clear();
       stopLocalPlayTimer();
     }
 
@@ -882,7 +959,7 @@
         `;
         updateKeyProgressUI();
         const resetBtn = document.getElementById("TutResetKeys");
-        if (resetBtn) resetBtn.addEventListener("click", () => { pressedKeys.clear(); updateKeyProgressUI(); });
+        if (resetBtn) { resetBtn.onclick = null; resetBtn.addEventListener("click", () => { pressedKeys.clear(); updateKeyProgressUI(); }); }
       } else if (s === 2) {
         card.innerHTML = `
           <div style="font-weight:800">Step 2 — Talk to a friend</div>
@@ -899,7 +976,7 @@
           </div>
         `;
         const fin = document.getElementById("TutFinish");
-        if (fin) fin.addEventListener("click", finishTutorialAndStart);
+        if (fin) { fin.onclick = null; fin.addEventListener("click", finishTutorialAndStart); }
       }
     }
 
@@ -909,6 +986,7 @@
         pointer.id = "TutPointer";
         pointer.className = "TutorialPointer";
         pointer.textContent = "➡️";
+        pointer.style.position = "fixed";
         document.body.appendChild(pointer);
         pointer.style.opacity = "0";
         pointer.style.transition = "transform .18s ease, opacity .18s";
@@ -924,6 +1002,11 @@
 
     function updatePointerToClosestNpc() {
       if (!pointer) return;
+      if (!Canvas) {
+        pointer.style.opacity = "0";
+        return;
+      }
+
       let closest = null;
       let dist = Infinity;
       for (const n of Npcs) {
@@ -938,18 +1021,30 @@
         pointer.style.opacity = "0";
         return;
       }
+
       const canvasRect = Canvas.getBoundingClientRect();
-      const sx = canvasRect.left + (closest.WorldX * BlockSize - (Player.X - canvasRect.width / 2));
-      const sy = canvasRect.top + (closest.WorldY * BlockSize - (Player.Y - canvasRect.height / 2));
-      const px = Math.max(12, Math.min(window.innerWidth - 40, sx));
-      const py = Math.max(12, Math.min(window.innerHeight - 40, sy));
+      const cw = Canvas.clientWidth || canvasRect.width || window.innerWidth;
+      const ch = Canvas.clientHeight || canvasRect.height || (window.innerHeight - 70);
+
+      // npc screen coordinates (world -> screen)
+      const npcScreenX = canvasRect.left + (closest.WorldX * BlockSize - (Player.X - cw / 2));
+      const npcScreenY = canvasRect.top + (closest.WorldY * BlockSize - (Player.Y - ch / 2));
+
+      // compute player center on screen
+      const playerScreenX = canvasRect.left + cw / 2;
+      const playerScreenY = canvasRect.top + ch / 2;
+
+      // place pointer *above the player* (not on the NPC) and rotate to point at NPC
+      const offsetAbove = Math.max(12, Player.Size / 1.6); // px above the player's center
+      const px = Math.max(12, Math.min(window.innerWidth - 40, playerScreenX));
+      const py = Math.max(12, Math.min(window.innerHeight - 40, playerScreenY - offsetAbove));
       pointer.style.left = `${px}px`;
       pointer.style.top = `${py}px`;
       pointer.style.opacity = "1";
-      const cx = canvasRect.left + canvasRect.width / 2;
-      const cy = canvasRect.top + canvasRect.height / 2;
-      const angle = Math.atan2(py - cy, px - cx);
-      pointer.style.transform = `rotate(${angle}rad) translate(0,0)`;
+
+      const angle = Math.atan2(npcScreenY - playerScreenY, npcScreenX - playerScreenX);
+      // rotate arrow to point toward npc; add a small offset so arrow points cleanly upward when angle ~ -90deg
+      pointer.style.transform = `rotate(${angle}rad)`;
     }
 
     function proceedToTalk() { showStage(2); }
@@ -984,6 +1079,8 @@
       if (hasSeen && !force) return false;
       showFullScreen();
       active = true;
+      stage = -1;
+      pressedKeys.clear();
       return true;
     }
 
@@ -1016,7 +1113,11 @@
       });
     }
 
-    return { startIfNeeded, isActive: () => active, onKeyPressed, onUserTalkToNpc, updatePointerToClosestNpc };
+    function canInteract() {
+      return !active || stage >= 2;
+    }
+
+    return { startIfNeeded, isActive: () => active, onKeyPressed, onUserTalkToNpc, updatePointerToClosestNpc, canInteract };
   })();
 
   let secondsPlayed = SaveManager.GetTimePlayed(Username) || 0;
@@ -1054,11 +1155,12 @@
   document.addEventListener("visibilitychange", () => { tabVisible = document.visibilityState === "visible"; });
 
   if (ProximityPromptEl) {
-    ProximityPromptEl.addEventListener("click", (ev) => { ev.preventDefault(); TryInteract(); });
-    ProximityPromptEl.addEventListener("contextmenu", (ev) => { ev.preventDefault(); TryInteract(); });
-    ProximityPromptEl.addEventListener("touchstart", (ev) => { ev.preventDefault(); TryInteract(); }, { passive: false });
+    ProximityPromptEl.addEventListener("click", (ev) => { ev.preventDefault(); if (TutorialManager.canInteract()) TryInteract(); else showTemporaryBanner("Complete the tutorial step before interacting."); });
+    ProximityPromptEl.addEventListener("contextmenu", (ev) => { ev.preventDefault(); if (TutorialManager.canInteract()) TryInteract(); else showTemporaryBanner("Complete the tutorial step before interacting."); });
+    ProximityPromptEl.addEventListener("touchstart", (ev) => { ev.preventDefault(); if (TutorialManager.canInteract()) TryInteract(); }, { passive: false });
     ProximityPromptEl.addEventListener("keydown", (ev) => {
-      if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); TryInteract(); }
+      if ((ev.key === "Enter" || ev.key === " ") && TutorialManager.canInteract()) { ev.preventDefault(); TryInteract(); }
+      else if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); showTemporaryBanner("Complete the tutorial step before interacting."); }
     });
   }
 
@@ -1083,7 +1185,6 @@
   function initUIControls() {
     const mute = document.getElementById("MuteBtn");
     const topMute = document.getElementById("TopMuteBtn");
-    const topUnhide = document.getElementById("TopUnhideBtn");
     const hudToggle = document.getElementById("HUDToggleBtn");
     const shopOpenBtn = document.getElementById("ShopOpenBtn");
     const closeShopBtn = document.getElementById("CloseShopBtn");
@@ -1271,7 +1372,7 @@
       const canvasRect = Canvas.getBoundingClientRect();
       const npcCenterX = canvasRect.left + closestNpc.screenX + BlockSize / 2;
       const npcTopY = canvasRect.top + closestNpc.screenY;
-      const left = npcCenterX - (promptRect.width / 2 || 16);
+      const left = npcCenterX - ((promptRect.width || 32) / 2);
       const top = npcTopY - (promptRect.height || 32) - 6;
       ProximityPromptEl.style.position = "fixed";
       ProximityPromptEl.style.left = `${left}px`;
@@ -1310,6 +1411,9 @@
 
     Update(rawDt);
     Draw();
+
+    // keep tutorial pointer up-to-date (if any)
+    if (TutorialManager.updatePointerToClosestNpc) TutorialManager.updatePointerToClosestNpc();
 
     requestAnimationFrame(GameLoop);
   }
@@ -1364,24 +1468,6 @@
 
     positionTopDock();
     UpdateUsernameUI();
-
-    const shopOpen = document.getElementById("ShopOpenBtn");
-    const shopPanel = document.getElementById("ShopPanel");
-    const closeShop = document.getElementById("CloseShopBtn");
-    if (shopOpen && shopPanel) {
-      shopOpen.addEventListener("click", () => {
-        shopPanel.classList.remove("hidden");
-        shopPanel.setAttribute("aria-hidden", "false");
-        shopPanel.style.display = "block";
-      });
-    }
-    if (closeShop && shopPanel) {
-      closeShop.addEventListener("click", () => {
-        shopPanel.classList.add("hidden");
-        shopPanel.setAttribute("aria-hidden", "true");
-        shopPanel.style.display = "none";
-      });
-    }
 
     if (TopRightControls) {
       TopRightControls.style.display = TopRightControls.style.display || "flex";
