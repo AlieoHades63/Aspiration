@@ -1,1 +1,3 @@
-This is aspiration, a proof-of-concept game designed to improve children's communication skills!
+Aspiration is a product meant to teach children communication skils through the use of games.
+
+v1.0.0
